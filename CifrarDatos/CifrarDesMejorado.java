@@ -85,7 +85,6 @@ public class CifrarDesMejorado {
                 // Mostramos el mensaje cifrado
                 System.out.println("El mensaje cifrado es: " + mensajeEncriptado);
 
-
             }
 
             // Informamos que vamos a descifrar
