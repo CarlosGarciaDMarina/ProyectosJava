@@ -7,95 +7,101 @@ import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.spec.RSAPublicKeySpec;
 import java.util.Scanner;
-import javax.crypto.Cipher;
 
+import javax.crypto.Cipher;
 
 public class CifrarDocumentoRSA {
 
-    public static void main(String[] args) {
+    // Funciones
+    // Función para generar un par de claves pública y privada utilizando el
+    // generador de claves RSA
+    public static KeyPair generarKey() throws Exception {
+        KeyPairGenerator key = KeyPairGenerator.getInstance("RSA");
+        return key.generateKeyPair();
+    }
 
-        // Variables que vamos a necesitar
-        String direccion = "";
-
-        File f = null;
-
-        //Encerramos en un try el scanner para asegurarnos de que se cierra adecuadamente despues de finalizar su uso
-        try (Scanner sc = new Scanner(System.in)) {
-
-            // Declaramos el generador de claves asimétricas RSA
-            KeyPairGenerator keygen = KeyPairGenerator.getInstance("RSA");
-            
-            // Generamos un par de claves pública y privada utilizando el generador de claves
-            KeyPair keypair = keygen.generateKeyPair();
-
+    // Función para cifrar el archivo de entrada utilizando la clave privada del par
+    // de claves
+    public static boolean archivoEncriptado(File f, KeyPair key) {
+        try 
+        {
             // Creamos un objeto de cifrado utilizando el algoritmo RSA
             Cipher desCipher = Cipher.getInstance("RSA");
+            desCipher.init((Cipher.ENCRYPT_MODE), key.getPrivate());
 
-            // Inicializamos el objeto de cifrado en modo de cifrado utilizando la clave privada del par de claves
-            // Esto nos permitirá cifrar el archivo con el algoritmo RSA
-            desCipher.init(Cipher.ENCRYPT_MODE, keypair.getPrivate());
+            try (FileInputStream fis = new FileInputStream(f);
+                    FileOutputStream fos = new FileOutputStream("D:/pruebas/FicheroCifrado", false)) {
+                byte[] buffer = new byte[64];
+                int byteLeidos = fis.read(buffer);
 
-            // Mostramos por pantalla la informacion para el usuario
-            System.out.println("Este programa cifra documentos de texto.");
-            System.out.println("Introduce la direccion del fichero que quieras cifrar: ");
-            direccion = sc.nextLine(); // Capturamos la direccion introducida por el usuario
+                // Leemos y ciframos el contenido del archivo por fragmentos
+                while (byteLeidos != -1) {
+                    byte[] cbuf = desCipher.doFinal(buffer, 0, byteLeidos);
+                    fos.write(cbuf);
+                    byteLeidos = fis.read(buffer);
 
-            // Abrimos el fichero
-            f = new File(direccion);
-
-            //Comprobamos si el fichero existe
-            if (f.exists()) 
-            {
-                // Ciframos el fichero
-                // Creamos un objeto FileInputStream para leer el contenido del fichero original
-                FileInputStream fis = new FileInputStream(f);
-
-                // Creamos un objeto FileOutputStream para escribir el contenido cifrado en el fichero de destino
-                try (FileOutputStream fos = new FileOutputStream("D:/pruebas/FicheroCifrado", false)) {
-
-                    // Creamos un buffer de bytes para leer y cifrar los datos por fragmentos
-                    byte[] buffer = new byte[64];
-
-                    // Leemos el primer fragmento de bytes del fichero original
-                    int byteLeidos = fis.read(buffer);
-
-                    // Iniciamos un bucle para cifrar y escribir los datos por fragmentos
-                    while (byteLeidos != -1) {
-
-                        // Ciframos el fragmento actual utilizando el objeto Cipher (desCipher) en modo de cifrado
-                        // El método doFinal realiza el cifrado y devuelve los bytes cifrados en el array "cbuf"
-                        byte[] cbuf = desCipher.doFinal(buffer, 0, byteLeidos);
-
-                        // Escribimos los bytes cifrados en el fichero de destino utilizando el objeto FileOutputStream
-                        fos.write(cbuf);
-
-                        // Leemos el siguiente fragmento de bytes del fichero original para seguir cifrando
-                        byteLeidos = fis.read(buffer);
-                    }
                 }
-
-                System.out.println("El archivo ha sido cifrado con exito.");
-                
-            } else {
-
-                // Si el fichero no existe, mostramos un mensaje de error por pantalla
-                System.out.println("El fichero no existe.");
             }
 
-            // Generamos el otro par der llaves
-            KeyFactory keyfac = KeyFactory.getInstance("RSA");
-            System.out.println("Generando keyspec");
+            // Generamos y guardamos la clave publica en un archivo
+            generarPublic(key);
 
-            // Creamos una especificación de la clave pública a partir de la clave pública generada anteriormente
-            RSAPublicKeySpec publicKeySpec = keyfac.getKeySpec(keypair.getPublic(), RSAPublicKeySpec.class);
+            return true;
 
-            // Escribimos la clave pública en un archivo para poder usarla en el proceso de desencriptación posteriormente
-            FileOutputStream cos = new FileOutputStream("D:/pruebas/ClavePublica"); // Especificamos la ruta del archivo
-            PrintWriter pw = new PrintWriter(cos); // Preparamos el escritor para escribir en el archivo
-            pw.println(publicKeySpec.getModulus()); // Escribimos el módulo de la clave pública
-            pw.println(publicKeySpec.getPublicExponent()); // Escribimos el exponente público de la clave
-            pw.close(); // Cerramos el escritor para finalizar la escritura en el archivo
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // Funcion para generar y guardar la clave publica en un archivo
+    public static void generarPublic(KeyPair key) {
+        try {
+            KeyFactory keyFac = KeyFactory.getInstance("RSA");
+            RSAPublicKeySpec publicKeySpec = keyFac.getKeySpec(key.getPublic(), RSAPublicKeySpec.class);
+
+            try (FileOutputStream cos = new FileOutputStream("D:/pruebas/ClavePublica");
+                    PrintWriter pw = new PrintWriter(cos)) {
+                pw.println(publicKeySpec.getModulus());
+                pw.println(publicKeySpec.getPublicExponent());
+            }
             System.out.println("Se ha generado el otro par de llaves con exito.");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //Funcion main
+    public static void main(String[] args) {
+
+        // Variables
+        String direccion = "";
+
+        try (Scanner sc = new Scanner(System.in)) {
+            System.out.println("Este programa sirve para cifrar documentos de texto.");
+            System.out.println("Introduce la direccion del fichero que quieras: ");
+            direccion = sc.nextLine();
+
+            File f = new File(direccion);
+
+            if (f.exists()) {
+                // Si la carpeta existe generamos un par de claves publica y privada
+                KeyPair key = generarKey();
+
+                if (key != null) {
+                    // Ciframos el qarchivo utilizando el par de llaves
+                    if (archivoEncriptado(f, key)) {
+                        System.out.println("El archivo ha sido cifrado con exito.");
+                    } else {
+                        System.out.println("Error al cifrar el archivo.");
+                    }
+                } else {
+                    System.out.println("Error al generar el par de llaves.");
+                }
+
+            } else {
+                System.out.println("El fichjero no existe. ");
+            }
 
         } catch (Exception e) {
             System.out.println("Ha ocurrido un error inesperado. " + e.getMessage());
