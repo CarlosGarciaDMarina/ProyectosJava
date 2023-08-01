@@ -6,7 +6,7 @@ import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
-public class CifrarDesMejorado {
+public class CifrarAESMejorado {
 
     // Funciones
     public static byte[] longToBytes(long numero) {
@@ -29,9 +29,9 @@ public class CifrarDesMejorado {
             byte[] numerosCifrados = null;
 
             // Declaramos el generador de claves
-            KeyGenerator keyGen = KeyGenerator.getInstance("DES"); // Genero la key simetrica DES
+            KeyGenerator keyGen = KeyGenerator.getInstance("AES"); // Genero la key simetrica DES
             SecretKey key = keyGen.generateKey(); // Aplico la opacidad
-            Cipher desCipher = Cipher.getInstance("DES"); // Activo el cirador DES
+            Cipher desCipher = Cipher.getInstance("AES"); // Activo el cirador DES
 
             // Cifrar
             // Informamos que vamos a descifrar
