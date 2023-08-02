@@ -29,7 +29,7 @@ public class DescifrarDocumentoRSA {
             desCipher.init(Cipher.DECRYPT_MODE, privateKey);
 
             try (FileInputStream fis = new FileInputStream("D:/pruebas/FicheroCifrado");
-                    FileOutputStream fos = new FileOutputStream("D:/pruebas/FicheroDescifrado", false)) {
+                    FileOutputStream fos = new FileOutputStream("D:/pruebas/FicheroDescifrado", true)) {
 
                 byte[] buffer = new byte[256]; // Tamaño del buffer aumentado para mejorar rendimiento
                 int bytesLeidos;
