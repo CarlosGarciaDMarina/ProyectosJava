@@ -20,7 +20,6 @@ public class GestionFicheros {
         String lineaTexto = "";
         File f = null;
         FileWriter fw = null;
-        PrintWriter pw = null;
         FileReader fr = null;
         BufferedReader br = null;
 
