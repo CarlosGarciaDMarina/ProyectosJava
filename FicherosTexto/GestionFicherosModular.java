@@ -84,7 +84,7 @@ public class GestionFicherosModular {
             // Pasamos la direccion a la funcion para manejar archivos
             File f = new File(direccion);
 
-            // Leemos
+            // Ajustamos los parametros de las funciones que se encargan de leer ficheros
             FileReader fr = new FileReader(f);
             BufferedReader br = new BufferedReader(fr); // Buffer es para ir capturando la informacion linea a linea
             System.out.println(""); // salto de linea para mejorar la legibilidad

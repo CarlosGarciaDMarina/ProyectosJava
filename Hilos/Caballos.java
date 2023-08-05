@@ -1,79 +1,75 @@
 package Hilos;
 
-
 public class Caballos implements Runnable {
 
-    //Atributos
+    // Atributos
     protected String nombre;
     protected int id;
     protected int segundos = 5;
     protected long tiempoFinalizacion;
 
-    //Constructor
-    public Caballos(String nombre, int id){
+    // Constructor
+    public Caballos(String nombre, int id) {
         this.nombre = nombre;
         this.id = id;
         this.segundos = segundos;
     }
 
-    //Métodos
-    //Este metodo hace que los caballos empiecen a correr
-    public void run(){
-        //Encerramos en try-catch para gestionar errores
+    // Métodos
+    // Este metodo hace que los caballos empiecen a correr
+    public void run() {
+        // Encerramos en try-catch para gestionar errores
         try {
-            //Con esto asignamos un numero aleatorio a segundos
-            segundos = (int) (Math.random()*20);
+            // Con esto asignamos un numero aleatorio a segundos
+            segundos = (int) (Math.random() * 20);
 
             if (id == 1) {
-                //Avisamos que sale el caballo 
+                // Avisamos que sale el caballo
                 System.out.println("Sale " + nombre);
-                
-                //Introducimos la pausa del hilo
+
+                // Introducimos la pausa del hilo
                 Thread.sleep(segundos * 100);
 
-                //Avisamos del resultado
+                // Avisamos del resultado
                 System.out.println(nombre + " ha tardado " + segundos + " segundos.");
-                
+
             } else if (id == 2) {
-                //Avisamos que sale el caballo 
+                // Avisamos que sale el caballo
                 System.out.println("Sale " + nombre);
-                
-                //Introducimos la pausa del hilo
+
+                // Introducimos la pausa del hilo
                 Thread.sleep(segundos * 100);
 
-                //Avisamos del resultado
+                // Avisamos del resultado
                 System.out.println(nombre + " ha tardado " + segundos + " segundos.");
-                
+
             } else if (id == 3) {
-                //Avisamos que sale el caballo 
+                // Avisamos que sale el caballo
                 System.out.println("Sale " + nombre);
-                
-                //Introducimos la pausa del hilo
+
+                // Introducimos la pausa del hilo
                 Thread.sleep(segundos * 100);
 
-                //Avisamos del resultado
+                // Avisamos del resultado
                 System.out.println(nombre + " ha tardado " + segundos + " segundos.");
 
             } else {
-                //Control de errores
+                // Control de errores
                 System.out.println("Id no valida.");
 
             }
 
-            //Almacenamos el tiempo de finalizacion
+            // Almacenamos el tiempo de finalizacion
             tiempoFinalizacion = System.currentTimeMillis();
 
-
-
         } catch (Exception e) {
-            //Control de errores
+            // Control de errores
             System.out.println("Ha ocurrido un error inesperado." + e.getMessage());
         }
     }
 
-
-    //Getters & Setters
-    //Nombre
+    // Getters & Setters
+    // Nombre
     public String getNombre() {
         return nombre;
     }
@@ -82,7 +78,7 @@ public class Caballos implements Runnable {
         this.nombre = nombre;
     }
 
-    //Id
+    // Id
     public int getId() {
         return id;
     }
@@ -91,7 +87,7 @@ public class Caballos implements Runnable {
         this.id = id;
     }
 
-    //Segundos
+    // Segundos
     public int getSegundos() {
         return segundos;
     }
@@ -100,9 +96,9 @@ public class Caballos implements Runnable {
         this.segundos = segundos;
     }
 
-    //Tiempo de finalizacion
-    public long getTiempoFinalizacion(){
+    // Tiempo de finalizacion
+    public long getTiempoFinalizacion() {
         return tiempoFinalizacion;
     }
-    
+
 }
