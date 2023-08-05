@@ -88,18 +88,6 @@ public class Start {
         }
     }
 
-    // Funcion que muestra los datos de una persona en particular
-    public static boolean buscarPersona(String direccion, String persona){
-        //Try-catch para gestion de errores
-        try {
-            return true;
-        } catch (Exception e) {
-            // Error
-            System.out.println("Ha ocurrido un error inesperado. " + e.getMessage());
-            return false;
-        }
-    }
-
     // Funcion Main
     public static void main(String[] args) {
 
@@ -130,12 +118,11 @@ public class Start {
 
             try (Scanner sc = new Scanner(System.in)) {
 
-                System.out.println("|-----------------------------------|");
-                System.out.println("|0. Salir del programa.             |");
-                System.out.println("|1. Crear o Editar un fichero.      |");
-                System.out.println("|2. Leer un fichero.                |");
-                System.out.println("|-----------------------------------|");
-                System.out.println("|-----------------------------------|");
+                System.out.println("|-------------------------------------|");
+                System.out.println("|0. Salir del programa.               |");
+                System.out.println("|1. Crear o Editar un fichero.        |");
+                System.out.println("|2. Leer un fichero.                  |");
+                System.out.println("|-------------------------------------|");
                 System.out.println("Introduce una opcion del menu: ");
                 menu = sc.nextInt();
 
@@ -174,7 +161,6 @@ public class Start {
                             System.out.println("No hay ningun documento con ese nombre en la direccion proporcionada.");
                         }
                         break;
-
                     default:
                         System.out.println("Ha introducido un caracter inválido.");
                         break;
@@ -184,7 +170,7 @@ public class Start {
                 // Error con el Scanner
                 System.out.println("Ha ocurrido un error con el Scanner." + e.getMessage());
             }
-        } while ((menu < 0) && (menu > 5));
+        } while ((menu < 0) && (menu > 2));
 
     }
 }
