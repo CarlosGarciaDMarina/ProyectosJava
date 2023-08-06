@@ -1,10 +1,25 @@
 package POO;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
 import java.util.Scanner;
 
 public class Start {
@@ -88,11 +103,97 @@ public class Start {
         }
     }
 
+    // Funcion para crear un fichero binario
+    public static boolean crearBinario(String direccion, boolean sobreescribir, String nombre, String apellidos,
+            String ciudad, String nacionalidad, int edad) {
+        // Gestionamos errores con Try-Catch
+        try {
+
+            // Array de strings
+            String[] arrayDeStrings = { "Nombre: " + nombre + "\n", "Apellidos: " + apellidos + "\n",
+                    "Ciudad: " + ciudad + "\n", "Nacionalidad: " + nacionalidad + "\n", "Edad: " + edad + "\n" };
+
+            // Convertir el array de strings en bytes usando UTF-8
+            Charset charset = Charset.forName("UTF-8");
+            CharsetEncoder encoder = charset.newEncoder();
+
+            // Calcular el tamaño total de los bytes necesarios
+            int totalBytes = 0;
+            for (String str : arrayDeStrings) {
+                totalBytes += encoder.encode(CharBuffer.wrap(str)).remaining();
+            }
+
+            // Crear un buffer de bytes con el tamaño adecuado
+            ByteBuffer buffer = ByteBuffer.allocate(totalBytes);
+
+            // Codificar cada string y agregarlo al buffer
+            for (String str : arrayDeStrings) {
+                buffer.put(encoder.encode(CharBuffer.wrap(str)));
+            }
+
+            // Convertir el buffer de bytes a un array de bytes
+            byte[] arrayDeBytes = buffer.array();
+
+            // Escribir el array de bytes en un archivo binario
+            try (FileOutputStream fos = new FileOutputStream(direccion)) {
+                fos.write(arrayDeBytes);
+            } catch (IOException e) {
+                System.out.println("Error al escribir en el archivo: " + e.getMessage());
+            }
+
+            return true;
+
+        } catch (Exception e) {
+            // Error
+            System.out.println("Ha ocurrido un error inesperado. " + e.getMessage());
+            return false;
+        }
+    }
+
+    public static boolean leerBin(String direccion) {
+        // Gestionamos los errores que se puedan producir con TRY-CATCH
+        try {
+            // Variables
+            int numBytesLeidos = 0;
+            byte[] capturaDatosBin = new byte[1000];
+
+            // Pasamos la direccion a la clase que trata los archivos binarios
+            FileInputStream fis = new FileInputStream(direccion);
+            BufferedInputStream bis = new BufferedInputStream(fis);
+
+            numBytesLeidos = bis.read(capturaDatosBin); // Captura la info que hay en el fichero bin
+
+            // Mientras el numero de bytes leidos sea mayor de 0 va a seguir capturando
+            // bytes
+            while (numBytesLeidos > 0) {
+                /*
+                 * Si el archivo fuese muy grande deberiamos hacer otro array de bytes con
+                 * capacidad de 10000 para ir metiendole de hay los datos que vamos capturando
+                 */
+                numBytesLeidos = bis.read(capturaDatosBin); // DEsde la posicion 0 hasta la 999 se van a ir llenando
+                                                            // posiciones.
+
+                for (int i = 0; i < capturaDatosBin.length; i++) {
+                    // Vamos sacando cada uno de los bytes por pantalla
+                    System.out.println(capturaDatosBin[i]);
+                }
+            }
+
+            return true;
+        } catch (Exception e) {
+            // Error inesperado
+            System.out.println("Ha ocurrido un error inesperado." + e.getMessage());
+            return false;
+        }
+
+    }
+
     // Funcion Main
     public static void main(String[] args) {
 
         // Variables
         String direccion = "";
+        String direccionBin = "";
         boolean sobreescribir = true;
         int menu = 0;
 
@@ -112,7 +213,19 @@ public class Start {
         // Escribimos en un fichero
         System.out.println("Vamos a exportar los datos de las personas a un fichero.");
 
+        // Almacenamos la direccion del fichero txt que vamos a utilizar
+        // No utilizo la clase scanner para no tener que estar todo el tiempo
+        // escribiendo la direccion manual
+        // Pero solo habria que preguntarle la direccion al usuario con sysout y
+        // almacenarlo aqui
         direccion = "D:/ProyectosJava/POO/prueba/Personas.txt";
+
+        // Almacenamos la direccion del fichero bin que vamos a utilizar
+        // No utilizo la clase scanner para no tener que estar todo el tiempo
+        // escribiendo la direccion manual
+        // Pero solo habria que preguntarle la direccion al usuario con sysout y
+        // almacenarlo aqui
+        direccionBin = "D:/ProyectosJava/POO/prueba/Personas.bin";
 
         do {
 
@@ -122,13 +235,15 @@ public class Start {
                 System.out.println("|0. Salir del programa.               |");
                 System.out.println("|1. Crear o Editar un fichero.        |");
                 System.out.println("|2. Leer un fichero.                  |");
+                System.out.println("|3. Crear o Editar un fichero bin.    |");
+                System.out.println("|4. Leer un fichero binario.          |");
                 System.out.println("|-------------------------------------|");
                 System.out.println("Introduce una opcion del menu: ");
                 menu = sc.nextInt();
 
                 switch (menu) {
                     case 0:
-                    //Salir del programa
+                        // Salir del programa
                         System.out.println("Ha finalizado el programa.");
                         break;
                     case 1:
@@ -152,13 +267,41 @@ public class Start {
                         if (existe(direccion) == true) {
                             // SI existe leemos
                             System.out.println("Aqui empieza el fichero:");
-                            System.out.println(""); //Salto de linea para mejorar la legibilidad
+                            System.out.println(""); // Salto de linea para mejorar la legibilidad
                             leerFichero(direccion); // Funcion del ectura del fichero
-                            System.out.println(""); //Salto de linea para mejorar la legibilidad
+                            System.out.println(""); // Salto de linea para mejorar la legibilidad
                             System.out.println("Final del fichero.");
                         } else {
                             // Si NO existe avisamos de que no hay nada que leer
                             System.out.println("No hay ningun documento con ese nombre en la direccion proporcionada.");
+                        }
+                        break;
+                    case 3:
+                        // Crear o editar un binario
+                        // Comprobamos si el fichero existe
+                        if (existe(direccionBin)) {
+                            // SI existe
+                            crearBinario(direccionBin, sobreescribir, p3.getNombre(), p3.getApellidos(), p3.getCiudad(),
+                                    p3.getNacionalidad(), p3.getEdad());
+                            System.out.println("La insercion ha sido un exito.");
+
+                        } else {
+                            // No existe
+                            crearBinario(direccionBin, sobreescribir, p3.getNombre(), p3.getApellidos(), p3.getCiudad(),
+                                    p3.getNacionalidad(), p3.getEdad());
+                            System.out.println("El documento se ha creado con exito.");
+                        }
+
+                        break;
+                    case 4:
+                        // Leer binario
+                        // Comprobamos si el fichero existe
+                        if (existe(direccionBin)) {
+                            // SI existe
+                            leerBin(direccionBin);
+                        } else {
+                            // Si NO existe
+                            System.out.println("No hay ningun archivo binario que poder leer.");
                         }
                         break;
                     default:
