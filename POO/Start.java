@@ -7,19 +7,13 @@ import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetEncoder;
+
 import java.util.Scanner;
 
 public class Start {
@@ -178,6 +172,7 @@ public class Start {
                     System.out.println(capturaDatosBin[i]);
                 }
             }
+            bis.close(); //Cerramos
 
             return true;
         } catch (Exception e) {
