@@ -12,7 +12,7 @@ public class Caballos implements Runnable {
     public Caballos(String nombre, int id) {
         this.nombre = nombre;
         this.id = id;
-        this.segundos = segundos;
+        //this.segundos = segundos;
     }
 
     // Métodos

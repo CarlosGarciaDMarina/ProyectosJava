@@ -1,0 +1,44 @@
+Nombre: Kanata
+Apellidos: Amane
+Ciudad: Sora
+Nacionalidad: Japan
+Edad: 12
+
+Nombre: Kanata
+Apellidos: Amane
+Ciudad: Sora
+Nacionalidad: Japan
+Edad: 12
+
+Nombre: Pekora
+Apellidos: Usada
+Ciudad: Pekoland
+Nacionalidad: Japan
+Edad: 13
+
+Nombre: Luna
+Apellidos: Himemori
+Ciudad: McCandyKingdom
+Nacionalidad: Japan
+Edad: 11
+
+Nombre: Luna
+ Apellidos: Himemori
+ Ciudad: McCandyKingdom
+ Nacionalidad: Japan
+ Edad: 11
+Nombre: Luna
+ Apellidos: Himemori
+ Ciudad: McCandyKingdom
+ Nacionalidad: Japan
+ Edad: 11
+Nombre: Luna
+ Apellidos: Himemori
+ Ciudad: McCandyKingdom
+ Nacionalidad: Japan
+ Edad: 11
+Nombre: Luna
+ Apellidos: Himemori
+ Ciudad: McCandyKingdom
+ Nacionalidad: Japan
+ Edad: 11
